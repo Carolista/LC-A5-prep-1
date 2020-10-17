@@ -25,17 +25,21 @@ let palettes = [
 ];
 // HT: Hex values for palettes copied, rather efficiently, from https://coolors.co/palettes/trending
 
-let currentPalette = { "name": "", "colors": []};
+// Variable to store whichever palette is currently in use
+let currentPalette = { "name": "", "colors": []}; // default values on page load
 
-// Log to console when window has loaded. //TODO: need to explain why
+// Event listener for page load
 window.addEventListener("load", function() {
-    console.log('Window loaded.');
+    console.log('Page loaded.');
+    // If we were fetching JSON from elsewhere, we'd do it here and call init() from inside
+    console.log('Data loaded.');
+    // For now we'll just tell the browser that the DOM code can run!
+    init();
 });
 
 
-// This function is referenced at the bottom by window.onload
+// DOM code - handles all functionality once it's called in the window load listener
 function init() {
-
 
     /*** Reference objects needed for dynamic functionality ***/
 
@@ -51,9 +55,9 @@ function init() {
     }
 
 
-    /*** Event listeners and functions ***/
+    /*** Event listeners & functions ***/
 
-    /* This first one establishes a named function and then calls it from the event listener below. */
+    /* For this first one we establish a named function and then call it from the event listener below. */
 
     // Select "random" new palette and change name and colors
     function changePalette() {
@@ -81,7 +85,8 @@ function init() {
         }
 
     }
-    // Call function from event listener
+
+    // Call changePalette() function from event listener for button click
     button.addEventListener("click", changePalette);
 
 
@@ -99,6 +104,3 @@ function init() {
     
 
 }
-
-// Tell the browser to run init() function upon loading
-window.onload = init;
