@@ -26,81 +26,74 @@ let palettes = [
 // HT: Hex values for palettes copied, rather efficiently, from https://coolors.co/palettes/trending
 
 // Variable to store whichever palette is currently in use
-let currentPalette = { "name": "", "colors": []}; // default values on page load
+
+let currentPalette = { "name": "", "colors": [] };
 
 // Event listener for page load
-window.addEventListener("load", function() {
-    console.log('Page loaded.');
-    // If we were fetching JSON from elsewhere, we'd do it here and call init() from inside
-    console.log('Data loaded.');
-    // For now we'll just tell the browser that the DOM code can run!
-    init();
+window.addEventListener("load", function(){
+    console.log(`page loaded`);
+    console.log (`data loaded`)
+
+    init(); //since we're not working from a JSON file, this is set up to run the init statement after the fact.
 });
 
-
 // DOM code - handles all functionality once it's called in the window load listener
-function init() {
+
+function init(){
 
     /*** Reference objects needed for dynamic functionality ***/
-
+    //use id's from index.html to reference the objects needed.
     let header = document.getElementById("header");
-    let coloredText = document.getElementById("colored-text"); // "Color Palette Random Generator"
     let button = document.getElementById("get-colors");
     let paletteName = document.getElementById("palette-name");
-    let colorBlocks = []; // To store all five div elements
-    let colorCodes = []; // To store all five p elements
-    for (let i=0; i < 5; i++) {
-        colorBlocks.push(document.getElementById("color" + i));
-        colorCodes.push(document.getElementById("code" + i));
+    let colorBlocks = []; // stores all 5 div elements in the color blocks
+    let colorCodes = []; //stores all the p elements for the color codes
+    for (let i = 0; i < colorBlocks.length; i++){
+        colorBlocks.push(document.getElementById("color" + i)); //the ("color" + i) is concatting "colori" for the HTML color ids in lines 33-37 !!Always refer to the id= "whatevertheidis"!!
+        colorCodes.push(document.getElementById("code" + i)); //the ("code" + i) is concat "codei" for HTML in lines 40-44
     }
+     
 
 
     /*** Event listeners & functions ***/
 
+    function changePalette(){
+        let randomIndex;
+
+        do{
+            randomIndex = Math.floor(Math.random() * palettes.length);
+            currentPalette = palettes[randomIndex];
+        }while(paletteName.innerHTML === currentPalette.name)
+        console.log(`current palette is ${currentPalette.name}.`)
+        paletteName.innerHTML = currentPalette.name // index.html file has palette-name on line 31. We're changing the innerHTML which is what falls betw opening and closing tags associated with said id
+        for (let i = 0; i < 5; i++){
+            colorBlocks[i].style.backgroundColor =  currentPalette.colors[i]; //css bg color is background-color, for the JS version, most style props will be converted to camelCase
+        }
+
+
+    }
+    button.addEventListener("click", changePalette);
+}
+
     /* For this first one we establish a named function and then call it from the event listener below. */
 
     // Select "random" new palette and change name and colors
-    function changePalette() {
-        let randomIndex;
 
         // Pop up alert only if it's the first time clicking the button
-        if (currentPalette.name === "") {
-            window.confirm("Let's get rid of this boring, monochromatic look and add some pizzazz!");
-        }
+       
 
         // Pick new palette and validate it's not the same as the last one
-        do {
-            randomIndex = Math.floor(Math.random() * palettes.length);
-            currentPalette = palettes[randomIndex];
-        } while (paletteName.innerHTML === currentPalette.name) 
-        console.log(`Color palette is now ${currentPalette.name}.`);
+        
 
         // Now modify everything on the page
-        header.style.backgroundColor = currentPalette.colors[0];
-        coloredText.style.color = currentPalette.colors[4];
-        paletteName.innerHTML = currentPalette.name;
-        for (let i=0; i < 5; i++) {
-            colorBlocks[i].style.backgroundColor = currentPalette.colors[i];
-            colorCodes[i].innerHTML = currentPalette.colors[i];
-        }
-
-    }
+        
 
     // Call changePalette() function from event listener for button click
-    button.addEventListener("click", changePalette);
 
 
     /* These two just have anonymous functions built in. */
 
     // Change button color on mouseover
-    button.addEventListener("mouseover", function() {
-        button.style.backgroundColor = currentPalette.colors[4];
-    });
 
     // Change button color back on mouseout
-    button.addEventListener("mouseout", function() {
-        button.style.backgroundColor = "#222";
-    });
-    
 
-}
